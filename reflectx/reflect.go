@@ -3,10 +3,10 @@
 // allows for Go-compatible named attribute access, including accessing embedded
 // struct attributes and the ability to use  functions and struct tags to
 // customize field names.
-//
 package reflectx
 
 import (
+	"fmt"
 	"reflect"
 	"runtime"
 	"strings"
@@ -429,13 +429,17 @@ QueueLoop:
 
 	flds := &StructMap{Index: m, Tree: root, Paths: map[string]*FieldInfo{}, Names: map[string]*FieldInfo{}}
 	for _, fi := range flds.Index {
+		fmt.Println(fi.Name)
 		// check if nothing has already been pushed with the same path
 		// sometimes you can choose to override a type using embedded struct
+		if strings.Contains(fi.Name, "game_created_at") {
+			fmt.Println(fi.Name)
+		}
 		fld, ok := flds.Paths[fi.Path]
 		if !ok || fld.Embedded {
 			flds.Paths[fi.Path] = fi
 			if fi.Name != "" && !fi.Embedded {
-				flds.Names[fi.Path] = fi
+				flds.Names[fi.Name] = fi
 			}
 		}
 	}
